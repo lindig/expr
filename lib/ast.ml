@@ -22,7 +22,7 @@ type bool_expr =
   | GreaterEqual of float_expr * float_expr
   | NotEqual of float_expr * float_expr
 
-type expression = A_Expr of float_expr | B_Expr of bool_expr
+type expression = Float of float_expr | Bool of bool_expr
 
 (* Utility function to print a float AST (for demonstration) *)
 let rec string_of_float_expr = function
@@ -71,6 +71,5 @@ let rec string_of_bool_expr = function
 
 (* Utility function to print the top-level AST *)
 let string_of_expression = function
-  | A_Expr fe -> Printf.sprintf "Float Expression: %s" (string_of_float_expr fe)
-  | B_Expr be ->
-      Printf.sprintf "Boolean Expression: %s" (string_of_bool_expr be)
+  | Float fe -> Printf.sprintf "Float Expression: %s" (string_of_float_expr fe)
+  | Bool be -> Printf.sprintf "Boolean Expression: %s" (string_of_bool_expr be)

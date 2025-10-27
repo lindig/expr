@@ -1,11 +1,18 @@
 {
   open Parser        (* The type token is defined in parser.mli *)
   exception Failure of string
+
+  let fail fmt = Printf.ksprintf (fun msg -> raise (Failure msg)) fmt
 }
+
+let digit  = ['0'-'9']
+let digits = digit digit*
+let alpha  = ['a'-'z' '_']
+let id     = alpha (digit|alpha)*
+let number = digit+ ('.' digit*)?
 
 rule token = parse
   [' ' '\t' '\r'] { token lexbuf } (* Skip whitespace *)
-| '\n' { EOL } (* End of Line token to mark end of input *)
 
 (* Arithmetic Operators *)
 | '+' { PLUS }
@@ -19,6 +26,7 @@ rule token = parse
 | ">=" { GREATEREQUAL }
 | ">" { GREATER }
 | "==" { EQUAL }
+| "=" { EQUAL }
 | "!=" { NOTEQUAL }
 
 (* Logical Operators (Booleans) *)
@@ -33,7 +41,8 @@ rule token = parse
 (* Keywords and Literals *)
 | "true" { BOOL_LITERAL true }
 | "false" { BOOL_LITERAL false }
-| ['0'-'9']+ ('.' ['0'-'9']*)? as f { FLOAT_LITERAL (float_of_string f) }
+| id as id { ID(id) } 
+| number as f { FLOAT_LITERAL (float_of_string f) }
 | eof { EOF }
-| _ { raise (Failure ("Lexical error: unexpected character")) }
+| _ as c { fail "unexpected character '%c'" c } 
 
