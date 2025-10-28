@@ -21,4 +21,4 @@ let hello line =
   flush stdout;
   let lexbuf = Lexing.from_string line in
   let ast = parse lexbuf in
-  Printf.printf "AST: %s\n" (Ast.string_of_expression ast)
+  Printf.printf "AST: %s\n" (Ast.eval ast)

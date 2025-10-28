@@ -3,6 +3,10 @@
    Expressions can evaluate to either a float (A) or a boolean (B).
 *)
 
+exception Failure of string
+
+let fail fmt = Printf.ksprintf (fun msg -> raise (Failure msg)) fmt
+
 type float_expr =
   | FloatLiteral of float
   | Plus of float_expr * float_expr
@@ -24,52 +28,29 @@ type bool_expr =
 
 type expression = Float of float_expr | Bool of bool_expr
 
-(* Utility function to print a float AST (for demonstration) *)
-let rec string_of_float_expr = function
-  | FloatLiteral f -> Printf.sprintf "%.2f" f
-  | Plus (e1, e2) ->
-      Printf.sprintf "(%s + %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
-  | Minus (e1, e2) ->
-      Printf.sprintf "(%s - %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
-  | Times (e1, e2) ->
-      Printf.sprintf "(%s * %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
-  | Divide (e1, e2) ->
-      Printf.sprintf "(%s / %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
+let rec float_expr = function
+  | FloatLiteral f -> f
+  | Plus (e1, e2) -> float_expr e1 +. float_expr e2
+  | Minus (e1, e2) -> float_expr e1 -. float_expr e2
+  | Times (e1, e2) -> float_expr e1 *. float_expr e2
+  | Divide (e1, e2) -> (
+      match (float_expr e1, float_expr e2) with
+      | _, 0.0 -> fail "division by zero"
+      | x, y -> x /. y)
 
-(* Utility function to print a boolean AST (for demonstration) *)
-let rec string_of_bool_expr = function
-  | BoolLiteral b -> string_of_bool b
-  | Not e -> Printf.sprintf "(~ %s)" (string_of_bool_expr e)
-  | And (e1, e2) ->
-      Printf.sprintf "(%s && %s)" (string_of_bool_expr e1)
-        (string_of_bool_expr e2)
-  | Or (e1, e2) ->
-      Printf.sprintf "(%s || %s)" (string_of_bool_expr e1)
-        (string_of_bool_expr e2)
-  | Equal (e1, e2) ->
-      Printf.sprintf "(%s == %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
-  | Less (e1, e2) ->
-      Printf.sprintf "(%s < %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
-  | Greater (e1, e2) ->
-      Printf.sprintf "(%s > %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
-  | LessEqual (e1, e2) ->
-      Printf.sprintf "(%s <= %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
-  | GreaterEqual (e1, e2) ->
-      Printf.sprintf "(%s >= %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
-  | NotEqual (e1, e2) ->
-      Printf.sprintf "(%s != %s)" (string_of_float_expr e1)
-        (string_of_float_expr e2)
+and bool_expr = function
+  | BoolLiteral b -> b
+  | Not e -> not (bool_expr e)
+  | And (e1, e2) -> bool_expr e1 && bool_expr e2
+  | Or (e1, e2) -> bool_expr e1 || bool_expr e2
+  | Equal (e1, e2) -> float_expr e1 = float_expr e2
+  | Less (e1, e2) -> float_expr e1 < float_expr e2
+  | Greater (e1, e2) -> float_expr e1 > float_expr e2
+  | LessEqual (e1, e2) -> float_expr e1 <= float_expr e2
+  | GreaterEqual (e1, e2) -> float_expr e1 >= float_expr e2
+  | NotEqual (e1, e2) -> float_expr e1 <> float_expr e2
 
 (* Utility function to print the top-level AST *)
-let string_of_expression = function
-  | Float fe -> Printf.sprintf "Float Expression: %s" (string_of_float_expr fe)
-  | Bool be -> Printf.sprintf "Boolean Expression: %s" (string_of_bool_expr be)
+let eval = function
+  | Float fe -> float_expr fe |> fun f -> Printf.sprintf "%f" f
+  | Bool be -> bool_expr be |> fun b -> Printf.sprintf "%b" b
