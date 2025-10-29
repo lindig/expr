@@ -29,7 +29,7 @@ expression:
 
 float_expr:
   | FLOAT_LITERAL    { FloatLiteral $1 }
-  | ID               { FloatLiteral 0.0 }
+  | ID               { ID $1 }
   | LPAREN float_expr RPAREN { $2 }
   | float_expr PLUS float_expr { Plus ($1, $3) }
   | float_expr MINUS float_expr { Minus ($1, $3) }

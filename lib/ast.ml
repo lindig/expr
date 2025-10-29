@@ -9,6 +9,7 @@ let fail fmt = Printf.ksprintf (fun msg -> raise (Failure msg)) fmt
 
 type float_expr =
   | FloatLiteral of float
+  | ID of string
   | Plus of float_expr * float_expr
   | Minus of float_expr * float_expr
   | Times of float_expr * float_expr
@@ -30,6 +31,7 @@ type expression = Float of float_expr | Bool of bool_expr
 
 let rec float_expr = function
   | FloatLiteral f -> f
+  | ID _ -> 0.0
   | Plus (e1, e2) -> float_expr e1 +. float_expr e2
   | Minus (e1, e2) -> float_expr e1 -. float_expr e2
   | Times (e1, e2) -> float_expr e1 *. float_expr e2
