@@ -34,4 +34,13 @@ format:
 	opam lint
 	git ls-files '**/*.[ch]' | xargs -n1 indent -nut -i8
 
+changes:
+	git log "$$(git describe --tags --abbrev=0)..HEAD" --pretty=format:"* %s"
+
+release:
+	dune-release tag
+	dune-release distrib
+	dune-release opam pkg
+	echo 'use "dune-release opam submit" to release on Opam'
+
 # vim:ts=8:noet:
