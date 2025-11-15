@@ -11,3 +11,4 @@ val env : (string * float) list -> env
 val compile : string -> expression
 val string : env -> string -> value
 val expr : env -> expression -> value
+val simple: string -> value

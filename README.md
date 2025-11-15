@@ -2,28 +2,38 @@
 
 ![Build](https://github.com/lindig/expr/workflows/CI/badge.svg)
 
-# Hello
+# Expr
 
-This is a minimal [OCaml] project that I use as a [template] for new
-projects.
+A simple [OCaml] library to evaluate an arithmetic expression. This
+allows an application to accept expressions rather than just literal
+values from the command line or any other input:
 
-* Top-level Makefile for convenience: just say `make` but the actual
-  build is managed by Dune
-* Minimal command-line handling set up
-* GitHub Actions CI ready
-* Code is in Public Domain
+```ocaml
+    match Expr.Eval.simple "3.0 * 12" with
+    | Expr.Eval.Float x -> Printf.printf "%f" x
+    | _ 
+    | exception _ -> failwith "something went wrong"
+```
 
-# Changes
+Features:
+* Floating point and boolean expressions
+* Expressions may contain floating point variables
+* Proper precedence and associativity 
 
-* This repository is a now a [GitHub] [template] repository: creating a
-  new repositoty no longer brings along its history.
-* I've changed the default branch to `main`.
+# CLI
+
+This code is intended as a library but includes a minimal command-line
+binary that accept the string to evaluate as an argument:
+
+```sh
+./_build/default/bin/main.exe "3.0 * 3.0 * pi"
+28.274334
+```
 
 # Contribute
 
 If you find this useful, please contribute back by raising pull
 requests for improvements you made.
 
-[template]:   https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
 [GitHub]:   https://www.github.com/
 [OCaml]:    https://www.ocaml.org/

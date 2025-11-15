@@ -81,3 +81,4 @@ let compile str =
 
 let string env str = eval env (compile str)
 let expr env ast = eval env ast
+let simple str = eval (empty ()) (compile str)
