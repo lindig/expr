@@ -32,3 +32,5 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/lindig/expr.git"
+
+x-maintenance-intent: ["(latest)"]
