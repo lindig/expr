@@ -40,10 +40,14 @@ binary that accept the string to evaluate as an argument:
 28.274334
 ```
 
-# Usage
+# Installation
 
 The code is so simple that I would suggest to copy the `lib/` directory
-and use it and not bother with an opam installation.
+and use it and not bother with an opam installation:
+
+```
+$ opam pin add expr https://github.com/lindig/expr.git
+```
 
 # Documentation
 
