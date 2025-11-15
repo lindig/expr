@@ -4,6 +4,8 @@
 %token <bool> BOOL_LITERAL
 %token <string> ID
 %token LPAREN RPAREN
+%token LBRACK RBRACK
+%token KOMMA
 %token EOF
 
 %token OR AND NOT  EQUAL NOTEQUAL 
@@ -24,8 +26,8 @@
 %%
 
 expression:
-  | float_expr EOF   { Float $1 }
-  | bool_expr EOF    { Bool $1 }
+  | float_expr EOF   { FloatExpr $1 }
+  | bool_expr EOF    { BoolExpr $1 }
 
 float_expr:
   | FLOAT_LITERAL    { FloatLiteral $1 }
@@ -49,3 +51,7 @@ bool_expr:
   | float_expr GREATER float_expr    { Greater ($1, $3) }
   | float_expr LESSEQUAL float_expr  { LessEqual ($1, $3) }
   | float_expr GREATEREQUAL float_expr { GreaterEqual ($1, $3) }
+  | float_expr EQUAL LBRACK float_expr 
+               KOMMA  float_expr RBRACK { Inside ($1, $4, $6) }
+  | float_expr NOTEQUAL LBRACK float_expr 
+               KOMMA  float_expr RBRACK { Outside ($1, $4, $6) }

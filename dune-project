@@ -1,11 +1,11 @@
 (lang dune 2.7)
 
-(name hello)
+(name expr)
 
 (generate_opam_files true)
 
 (source
- (github lindig/hello))
+ (github lindig/expr))
 
 (license Unlicense)
 
@@ -14,10 +14,13 @@
 (maintainers "Christian Lindig <lindig@gmail.com>")
 
 (package
- (name hello)
- (synopsis "Minimal OCaml project for starting a new one")
+ (name expr)
+ (synopsis "Simple library to parse expressions")
  (description
-  "Hello is the classic hello world but organised as a proper OCaml project incuding command-line parsing and online help. It serves as a starting point for new projects.")
+  "A simple library to parse and evaluate arithmetic expressions that
+  may include variables. The purpose is for other code to accept an
+  expression rather than just a literal value. Both float and boolean
+  expressions are supported.")
  (depends
   (dune
    (>= "2.0"))

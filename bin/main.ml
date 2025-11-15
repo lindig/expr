@@ -9,21 +9,26 @@ let help =
   ; `S "MORE HELP"
   ; `P "Use `$(mname) $(i,COMMAND) --help' for help on a single command."
   ; `S "BUGS"
-  ; `P "Check bug reports at https://github.com/lindig/hello/issues"
+  ; `P "Check bug reports at https://github.com/lindig/expr/issues"
   ; `S "BUILD DETAILS"
   ; `P build
   ]
 
-let name' =
+let expression =
   C.Arg.(
-    value & pos 0 string "world"
-    & info [] ~docv:"NAME"
-        ~doc:"Name of person to greet; the default is 'world'.")
+    value & pos 0 string "" & info [] ~docv:"EXPR" ~doc:"Expression to evaluate")
 
-let hello =
-  let doc = "Say hello to someone" in
-  let info = C.Cmd.info "hello" ~doc ~man:help in
-  C.Cmd.v info @@ C.Term.(const Hello.hello $ name')
+let evaluate string =
+  let env = Expr.Eval.env [ ("pi", Float.pi); ("e", Float.exp 1.0) ] in
+  match Expr.Eval.string env string with
+  | Expr.Eval.Float x -> Printf.printf "%f\n" x
+  | Expr.Eval.Bool b -> Printf.printf "%b\n" b
+  | exception Expr.Eval.Failure msg -> Printf.printf "%s\n" msg
 
-let main () = C.Cmd.eval hello
+let expr =
+  let doc = "Evaluate an expression" in
+  let info = C.Cmd.info "expr" ~doc ~man:help in
+  C.Cmd.v info @@ C.Term.(const evaluate $ expression)
+
+let main () = C.Cmd.eval expr
 let () = if !Sys.interactive then () else main () |> exit

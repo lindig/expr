@@ -1,8 +1,3 @@
-(* Type definition for the Abstract Syntax Tree (AST).
-   This defines the structure of the recognized expressions.
-   Expressions can evaluate to either a float (A) or a boolean (B).
-*)
-
 type float_expr =
   | FloatLiteral of float
   | ID of string
