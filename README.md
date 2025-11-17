@@ -66,18 +66,19 @@ To be done; but take a look at:
 * scammer.mll for the syntax of tokens
 
 ```ocaml
+$ make utop
 utop # let eval = Expr.Eval.simple;;
 val eval : string -> Expr.Eval.value = <fun>
-─( 11:22:25 )─< command 1 >──────────────────────────────────────{ counter: 0 }─
+
 utop # eval "3+4*4";;
 - : Expr.Eval.value = Expr.Eval.Float 19.
-─( 11:22:53 )─< command 2 >──────────────────────────────────────{ counter: 0 }─
+
 utop # eval "-3 < 0";;
 - : Expr.Eval.value = Expr.Eval.Bool true
-─( 11:23:22 )─< command 3 >──────────────────────────────────────{ counter: 0 }─
+
 utop # eval "(5+3)*3";;
 - : Expr.Eval.value = Expr.Eval.Float 24.
-─( 11:23:48 )─< command 4 >──────────────────────────────────────{ counter: 0 }─
+
 utop # eval "4 = [0,5]";;
 - : Expr.Eval.value = Expr.Eval.Bool true
 ```
