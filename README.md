@@ -65,7 +65,7 @@ To be done; but take a look at:
 * parser.mly for the grammar
 * scammer.mll for the syntax of tokens
 
-```
+```ocaml
 utop # let eval = Expr.Eval.simple;;
 val eval : string -> Expr.Eval.value = <fun>
 ─( 11:22:25 )─< command 1 >──────────────────────────────────────{ counter: 0 }─
