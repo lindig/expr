@@ -22,8 +22,6 @@
   expression rather than just a literal value. Both float and boolean
   expressions are supported.")
  (depends
-  (dune
-   (>= "2.0"))
   (ocaml
    (>= 4.08.0))
   (cmdliner
