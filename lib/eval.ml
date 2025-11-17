@@ -53,7 +53,7 @@ and bool_expr env ast =
       let v1 = float_expr env e1 in
       let v2 = float_expr env e2 in
       let v3 = float_expr env e3 in
-      v1 < min v2 v3 || v1 < max v2 v3
+      v1 < min v2 v3 || v1 > max v2 v3
 
 let eval env ast =
   let open Ast in
