@@ -46,14 +46,15 @@ The code is so simple that I would suggest to copy the `lib/` directory
 and use it and not bother with an opam installation:
 
 ```sh
+$ opam install expr
+```
+
+or for the development version
+
+```sh
 $ opam pin add expr https://github.com/lindig/expr.git
 ```
 
-or
-
-```sh
-$ opam install expr
-```
 
 once this package has been merged into the official Opam repository.
 
