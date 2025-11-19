@@ -42,7 +42,7 @@ binary that accept the string to evaluate as an argument:
 
 The [Cmdliner] library can be extended to provide expression arguments:
 
-```
+```ocaml
 module C = Cmdliner
 module CmdlinerExpr = struct
   let error fmt = Printf.ksprintf (fun msg -> Error (`Msg msg)) fmt
