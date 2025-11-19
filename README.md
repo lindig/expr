@@ -65,7 +65,7 @@ let float =
 ```
 
 Above, `float` represents a positional argument providing a float value;
-unline the built-in Cmdliner float, this one is the result of an
+unlike the built-in Cmdliner `float`, this one is the result of an
 expression that the user provided.
 
 # Installation
