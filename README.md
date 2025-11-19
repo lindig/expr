@@ -40,6 +40,34 @@ binary that accept the string to evaluate as an argument:
 28.274334
 ```
 
+The [Cmdliner] library can be extended to provide expression arguments:
+
+```
+module C = Cmdliner
+module CmdlinerExpr = struct
+  let error fmt = Printf.ksprintf (fun msg -> Error (`Msg msg)) fmt
+  let env = Expr.Eval.env [ ("pi", Float.pi); ("e", Float.exp 1.0) ]
+
+  let of_string s =
+    match Expr.Eval.string env s with
+    | Expr.Eval.Float x -> Ok x
+    | _ | (exception _) -> error "%S is not a float expression" s
+
+  let to_string pp x = Format.pp_print_float pp x
+  let t = C.Arg.conv (of_string, to_string)
+end
+
+let float =
+  C.Arg.(
+    value & pos 0 CmdlinerExpr.t 0.0
+    & info [] ~docv:"EXPR" ~doc:"Numerical expression")
+
+```
+
+Above, `float` represents a positional argument providing a float value;
+unline the built-in Cmdliner float, this one is the result of an
+expression that the user provided.
+
 # Installation
 
 The code is so simple that I would suggest to copy the `lib/` directory
@@ -91,3 +119,4 @@ requests for improvements you made.
 
 [GitHub]:   https://www.github.com/
 [OCaml]:    https://www.ocaml.org/
+[Cmdliner]: https://erratique.ch/software/cmdliner

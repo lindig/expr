@@ -17,10 +17,7 @@
  (name expr)
  (synopsis "Simple library to parse expressions")
  (description
-  "A simple library to parse and evaluate arithmetic expressions that
-  may include variables. The purpose is for other code to accept an
-  expression rather than just a literal value. Both float and boolean
-  expressions are supported.")
+  "A simple library to parse and evaluate arithmetic expressions that\n  may include variables. The purpose is for other code to accept an\n  expression rather than just a literal value. Both float and boolean\n  expressions are supported.")
  (depends
   (ocaml
    (>= 4.08.0))

@@ -14,21 +14,34 @@ let help =
   ; `P build
   ]
 
-let expression =
-  C.Arg.(
-    value & pos 0 string "" & info [] ~docv:"EXPR" ~doc:"Expression to evaluate")
+(* small example how to add expressions to Cmdliner such that we can
+   accept them as arguments. *)
+module CmdlinerExpr = struct
+  let error fmt = Printf.ksprintf (fun msg -> Error (`Msg msg)) fmt
+  let env = Expr.Eval.env [ ("pi", Float.pi); ("e", Float.exp 1.0) ]
 
-let evaluate string =
-  let env = Expr.Eval.env [ ("pi", Float.pi); ("e", Float.exp 1.0) ] in
-  match Expr.Eval.string env string with
-  | Expr.Eval.Float x -> Printf.printf "%f\n" x
-  | Expr.Eval.Bool b -> Printf.printf "%b\n" b
-  | exception Expr.Eval.Failure msg -> Printf.printf "%s\n" msg
+  let of_string s =
+    match Expr.Eval.string env s with
+    | Expr.Eval.Float x -> Ok x
+    | _ | (exception _) -> error "%S is not a float expression" s
+
+  let to_string pp x = Format.pp_print_float pp x
+  let t = C.Arg.conv (of_string, to_string)
+end
+
+let float =
+  C.Arg.(
+    value & pos 0 CmdlinerExpr.t 0.0
+    & info [] ~docv:"EXPR" ~doc:"Numerical expression")
+
+let emit x =
+  Printf.printf "%f\n" x;
+  Ok ()
 
 let expr =
   let doc = "Evaluate an expression" in
   let info = C.Cmd.info "expr" ~doc ~man:help in
-  C.Cmd.v info @@ C.Term.(const evaluate $ expression)
+  C.Cmd.v info @@ C.Term.(const emit $ float)
 
-let main () = C.Cmd.eval expr
+let main () = C.Cmd.eval_result expr
 let () = if !Sys.interactive then () else main () |> exit
