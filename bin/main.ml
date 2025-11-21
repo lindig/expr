@@ -1,3 +1,6 @@
+(* SPDX-FileCopyrightText: 2025 Christian Lindig <lindig@gmail.com>
+ * SPDX-License-Identifier: Unlicense
+ *)
 module C = Cmdliner
 
 let build =

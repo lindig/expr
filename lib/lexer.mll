@@ -1,3 +1,6 @@
+(* SPDX-FileCopyrightText: 2025 Christian Lindig <lindig@gmail.com>
+ * SPDX-License-Identifier: Unlicense
+ *)
 {
   open Parser        (* The type token is defined in parser.mli *)
   exception Failure of string

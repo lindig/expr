@@ -1,3 +1,6 @@
+(* SPDX-FileCopyrightText: 2025 Christian Lindig <lindig@gmail.com>
+ * SPDX-License-Identifier: Unlicense
+ *)
 (* Type definition for the Abstract Syntax Tree (AST).
    This defines the structure of the recognized expressions.
    Expressions can evaluate to either a float (A) or a boolean (B).
