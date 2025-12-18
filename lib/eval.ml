@@ -20,49 +20,66 @@ let env kvs =
   List.iter (fun (key, value) -> add env key value) kvs;
   env
 
-let rec float_expr env ast =
+let rec float_expr op env x y =
+  match (expr env x, expr env y) with
+  | Float x, Float y -> Float (op x y)
+  | _ -> fail "incompatble types"
+
+and rel_expr op env x y =
+  match (expr env x, expr env y) with
+  | Float x, Float y -> Bool (op x y)
+  | _ -> fail "incompatble types"
+
+and bool_expr op env x y =
+  match (expr env x, expr env y) with
+  | Bool x, Bool y -> Bool (op x y)
+  | _ -> fail "incompatble types"
+
+and expr env ast =
   let open Ast in
   match ast with
-  | FloatLiteral f -> f
+  | FloatLiteral f -> Float f
+  | BoolLiteral b -> Bool b
   | ID id -> (
-      match lookup env id with None -> fail "%s is undefined" id | Some v -> v)
-  | Plus (e1, e2) -> float_expr env e1 +. float_expr env e2
-  | Minus (e1, e2) -> float_expr env e1 -. float_expr env e2
-  | Times (e1, e2) -> float_expr env e1 *. float_expr env e2
+      match lookup env id with
+      | None -> fail "%s is undefined" id
+      | Some v -> Float v)
+  | Plus (e1, e2) -> float_expr ( +. ) env e1 e2
+  | Minus (e1, e2) -> float_expr ( -. ) env e1 e2
+  | Times (e1, e2) -> float_expr ( *. ) env e1 e2
   | Divide (e1, e2) -> (
-      match (float_expr env e1, float_expr env e2) with
-      | _, 0.0 -> fail "division by zero"
-      | x, y -> x /. y)
+      match (expr env e1, expr env e2) with
+      | _, Float 0.0 -> fail "division by zero"
+      | Float x, Float y -> Float (x /. y)
+      | _ -> fail "incompatible types")
+  | Not e -> (
+      match expr env e with
+      | Bool x -> Bool (not x)
+      | _ -> fail "incompatible types")
+  | And (e1, e2) -> bool_expr ( && ) env e1 e2
+  | Or (e1, e2) -> bool_expr ( || ) env e1 e2
+  | Equal (e1, e2) -> rel_expr ( = ) env e1 e2
+  | Less (e1, e2) -> rel_expr ( < ) env e1 e2
+  | Greater (e1, e2) -> rel_expr ( > ) env e1 e2
+  | LessEqual (e1, e2) -> rel_expr ( <= ) env e1 e2
+  | GreaterEqual (e1, e2) -> rel_expr ( >= ) env e1 e2
+  | NotEqual (e1, e2) -> rel_expr ( <> ) env e1 e2
+  | Inside (e1, e2, e3) -> (
+      let v1 = expr env e1 in
+      let v2 = expr env e2 in
+      let v3 = expr env e3 in
+      match (v1, v2, v3) with
+      | Float v1, Float v2, Float v3 -> Bool (min v2 v3 <= v1 && v1 <= max v2 v3)
+      | _ -> fail "incompatible types")
+  | Outside (e1, e2, e3) -> (
+      let v1 = expr env e1 in
+      let v2 = expr env e2 in
+      let v3 = expr env e3 in
+      match (v1, v2, v3) with
+      | Float v1, Float v2, Float v3 -> Bool (v1 < min v2 v3 || v1 > max v2 v3)
+      | _ -> fail "incompatible types")
 
-and bool_expr env ast =
-  let open Ast in
-  match ast with
-  | BoolLiteral b -> b
-  | Not e -> not (bool_expr env e)
-  | And (e1, e2) -> bool_expr env e1 && bool_expr env e2
-  | Or (e1, e2) -> bool_expr env e1 || bool_expr env e2
-  | Equal (e1, e2) -> float_expr env e1 = float_expr env e2
-  | Less (e1, e2) -> float_expr env e1 < float_expr env e2
-  | Greater (e1, e2) -> float_expr env e1 > float_expr env e2
-  | LessEqual (e1, e2) -> float_expr env e1 <= float_expr env e2
-  | GreaterEqual (e1, e2) -> float_expr env e1 >= float_expr env e2
-  | NotEqual (e1, e2) -> float_expr env e1 <> float_expr env e2
-  | Inside (e1, e2, e3) ->
-      let v1 = float_expr env e1 in
-      let v2 = float_expr env e2 in
-      let v3 = float_expr env e3 in
-      min v2 v3 <= v1 && v1 <= max v2 v3
-  | Outside (e1, e2, e3) ->
-      let v1 = float_expr env e1 in
-      let v2 = float_expr env e2 in
-      let v3 = float_expr env e3 in
-      v1 < min v2 v3 || v1 > max v2 v3
-
-let eval env ast =
-  let open Ast in
-  match ast with
-  | FloatExpr e -> Float (float_expr env e)
-  | BoolExpr e -> Bool (bool_expr env e)
+let eval = expr
 
 let parse lexbuf =
   try Parser.expression Lexer.token lexbuf with

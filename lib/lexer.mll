@@ -89,7 +89,7 @@ and string =  parse
            { fun buf ->
              let s = get lexbuf  in
                ( Buffer.add_string buf s
-               ; string lexbuf  buf
+               ; string lexbuf buf
                )
            }
    | '"'   { fun buf -> ID (Buffer.contents buf) }

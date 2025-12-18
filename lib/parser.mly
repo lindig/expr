@@ -25,33 +25,28 @@
 
 %%
 
-expression:
-  | float_expr EOF   { FloatExpr $1 }
-  | bool_expr EOF    { BoolExpr $1 }
+expression: expr { $1 }
 
-float_expr:
-  | FLOAT_LITERAL    { FloatLiteral $1 }
-  | ID               { ID $1 }
-  | LPAREN float_expr RPAREN { $2 }
-  | float_expr PLUS float_expr { Plus ($1, $3) }
-  | float_expr MINUS float_expr { Minus ($1, $3) }
-  | float_expr TIMES float_expr { Times ($1, $3) }
-  | float_expr DIVIDE float_expr { Divide ($1, $3) }
-  | MINUS float_expr %prec UMINUS { Minus (FloatLiteral 0.0, $2) }
-
-bool_expr:
-  | BOOL_LITERAL     { BoolLiteral $1 }
-  | LPAREN bool_expr RPAREN { $2 }
-  | NOT bool_expr    { Not $2 }
-  | bool_expr AND bool_expr { And ($1, $3) }
-  | bool_expr OR bool_expr { Or ($1, $3) }
-  | float_expr EQUAL float_expr      { Equal ($1, $3) }
-  | float_expr NOTEQUAL float_expr   { NotEqual ($1, $3) }
-  | float_expr LESS float_expr       { Less ($1, $3) }
-  | float_expr GREATER float_expr    { Greater ($1, $3) }
-  | float_expr LESSEQUAL float_expr  { LessEqual ($1, $3) }
-  | float_expr GREATEREQUAL float_expr { GreaterEqual ($1, $3) }
-  | float_expr EQUAL LBRACK float_expr 
-               KOMMA  float_expr RBRACK { Inside ($1, $4, $6) }
-  | float_expr NOTEQUAL LBRACK float_expr 
-               KOMMA  float_expr RBRACK { Outside ($1, $4, $6) }
+expr:
+  | FLOAT_LITERAL         { FloatLiteral $1 }
+  | BOOL_LITERAL          { BoolLiteral $1 }
+  | ID                    { ID $1 }
+  | expr PLUS expr        { Plus ($1, $3) }
+  | expr MINUS expr       { Minus ($1, $3) }
+  | expr TIMES expr       { Times ($1, $3) }
+  | expr DIVIDE expr      { Divide ($1, $3) }
+  | MINUS expr %prec UMINUS { Minus (FloatLiteral 0.0, $2) }
+  
+  | NOT expr              { Not $2 }
+  | expr AND expr         { And ($1, $3) }
+  | expr OR expr          { Or ($1, $3) }
+  | expr EQUAL expr       { Equal ($1, $3) }
+  | expr NOTEQUAL expr    { NotEqual ($1, $3) }
+  | expr LESS expr        { Less ($1, $3) }
+  | expr GREATER expr     { Greater ($1, $3) }
+  | expr LESSEQUAL expr   { LessEqual ($1, $3) }
+  | expr GREATEREQUAL expr { GreaterEqual ($1, $3) }
+  | expr EQUAL LBRACK expr 
+               KOMMA  expr RBRACK { Inside ($1, $4, $6) }
+  | expr NOTEQUAL LBRACK expr 
+               KOMMA  expr RBRACK { Outside ($1, $4, $6) }

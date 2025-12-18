@@ -6,26 +6,24 @@
    Expressions can evaluate to either a float (A) or a boolean (B).
 *)
 
-type float_expr =
+type expr =
   | FloatLiteral of float
-  | ID of string
-  | Plus of float_expr * float_expr
-  | Minus of float_expr * float_expr
-  | Times of float_expr * float_expr
-  | Divide of float_expr * float_expr
-
-type bool_expr =
   | BoolLiteral of bool
-  | Not of bool_expr
-  | And of bool_expr * bool_expr
-  | Or of bool_expr * bool_expr
-  | Equal of float_expr * float_expr (* a == b *)
-  | Less of float_expr * float_expr (* a < b *)
-  | Greater of float_expr * float_expr (* a > b *)
-  | LessEqual of float_expr * float_expr
-  | GreaterEqual of float_expr * float_expr
-  | NotEqual of float_expr * float_expr
-  | Inside of float_expr * float_expr * float_expr (* v in [x, y] *)
-  | Outside of float_expr * float_expr * float_expr (* v in [x, y] *)
+  | ID of string
+  | Plus of expr * expr
+  | Minus of expr * expr
+  | Times of expr * expr
+  | Divide of expr * expr
+  | Not of expr
+  | And of expr * expr
+  | Or of expr * expr
+  | Equal of expr * expr (* a == b *)
+  | Less of expr * expr (* a < b *)
+  | Greater of expr * expr (* a > b *)
+  | LessEqual of expr * expr
+  | GreaterEqual of expr * expr
+  | NotEqual of expr * expr
+  | Inside of expr * expr * expr (* v in [x, y] *)
+  | Outside of expr * expr * expr (* v in [x, y] *)
 
-type expression = FloatExpr of float_expr | BoolExpr of bool_expr
+type expression = expr
