@@ -80,7 +80,7 @@ let compile str =
   try
     let lexbuf = Lexing.from_string str in
     parse lexbuf
-  with _ -> fail "Error in %S" str
+  with Failure msg -> fail "Error in %S: %s" str msg
 
 let string env str = eval env (compile str)
 let expr env ast = eval env ast

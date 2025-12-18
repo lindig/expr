@@ -26,7 +26,9 @@ module CmdlinerExpr = struct
   let of_string s =
     match Expr.Eval.string env s with
     | Expr.Eval.Float x -> Ok x
-    | _ | (exception _) -> error "%S is not a float expression" s
+    | Expr.Eval.Bool _ -> error "%s is a boolean expression" s
+    | exception Expr.Eval.Failure msg -> error "%s" msg
+    | exception e -> error "%s" (Printexc.to_string e)
 
   let to_string pp x = Format.pp_print_float pp x
   let t = C.Arg.conv (of_string, to_string)
