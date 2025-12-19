@@ -5,6 +5,7 @@ exception Failure of string
 
 type expression = Ast.expression
 type value = Bool of bool | Float of float
+type rel = EQ | NE | LT | GT | LE | GE
 
 let fail fmt = Printf.ksprintf (fun msg -> raise (Failure msg)) fmt
 let lookup env key = Hashtbl.find_opt env key
@@ -25,9 +26,16 @@ let float_eval op x y =
   | Float x, Float y -> Float (op x y)
   | _ -> fail "incompatble types"
 
-let rel_eval op x y =
-  match (x, y) with
-  | Float x, Float y -> Bool (op x y)
+let rel_eval rel x y =
+  match (rel, x, y) with
+  | EQ, Float x, Float y -> Bool (x = y)
+  | NE, Float x, Float y -> Bool (x <> y)
+  | GT, Float x, Float y -> Bool (x > y)
+  | LT, Float x, Float y -> Bool (x < y)
+  | GE, Float x, Float y -> Bool (x >= y)
+  | LE, Float x, Float y -> Bool (x <= y)
+  | EQ, Bool x, Bool y -> Bool (x = y)
+  | NE, Bool x, Bool y -> Bool (x <> y)
   | _ -> fail "incompatble types"
 
 let bool_eval op x y =
@@ -58,12 +66,12 @@ let rec eval env ast =
       | _ -> fail "incompatible types")
   | And (e1, e2) -> bool_eval ( && ) (eval env e1) (eval env e2)
   | Or (e1, e2) -> bool_eval ( || ) (eval env e1) (eval env e2)
-  | Equal (e1, e2) -> rel_eval ( = ) (eval env e1) (eval env e2)
-  | Less (e1, e2) -> rel_eval ( < ) (eval env e1) (eval env e2)
-  | Greater (e1, e2) -> rel_eval ( > ) (eval env e1) (eval env e2)
-  | LessEqual (e1, e2) -> rel_eval ( <= ) (eval env e1) (eval env e2)
-  | GreaterEqual (e1, e2) -> rel_eval ( >= ) (eval env e1) (eval env e2)
-  | NotEqual (e1, e2) -> rel_eval ( <> ) (eval env e1) (eval env e2)
+  | Equal (e1, e2) -> rel_eval EQ (eval env e1) (eval env e2)
+  | Less (e1, e2) -> rel_eval LT (eval env e1) (eval env e2)
+  | Greater (e1, e2) -> rel_eval GT (eval env e1) (eval env e2)
+  | LessEqual (e1, e2) -> rel_eval LE (eval env e1) (eval env e2)
+  | GreaterEqual (e1, e2) -> rel_eval GE (eval env e1) (eval env e2)
+  | NotEqual (e1, e2) -> rel_eval NE (eval env e1) (eval env e2)
   | Inside (e1, e2, e3) -> (
       let v1 = eval env e1 in
       let v2 = eval env e2 in
