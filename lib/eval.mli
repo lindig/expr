@@ -4,7 +4,7 @@
 exception Failure of string
 
 type expression
-type value = Bool of bool | Float of float
+type value = Bool of bool | Float of float | String of string
 type env
 
 val empty : unit -> env

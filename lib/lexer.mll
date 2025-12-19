@@ -92,5 +92,5 @@ and string =  parse
                ; string lexbuf buf
                )
            }
-   | '"'   { fun buf -> ID (Buffer.contents buf) }
+   | '"'   { fun buf -> STRING (Buffer.contents buf) }
    | _     { fun _buf -> fail "unexpected character inside a string " }

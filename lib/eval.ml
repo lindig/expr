@@ -4,7 +4,7 @@
 exception Failure of string
 
 type expression = Ast.expression
-type value = Bool of bool | Float of float
+type value = Bool of bool | Float of float | String of string
 type rel = EQ | NE | LT | GT | LE | GE
 
 let fail fmt = Printf.ksprintf (fun msg -> raise (Failure msg)) fmt
@@ -34,6 +34,12 @@ let rel_eval rel x y =
   | LT, Float x, Float y -> Bool (x < y)
   | GE, Float x, Float y -> Bool (x >= y)
   | LE, Float x, Float y -> Bool (x <= y)
+  | EQ, String x, String y -> Bool (x = y)
+  | NE, String x, String y -> Bool (x <> y)
+  | GT, String x, String y -> Bool (x > y)
+  | LT, String x, String y -> Bool (x < y)
+  | GE, String x, String y -> Bool (x >= y)
+  | LE, String x, String y -> Bool (x <= y)
   | EQ, Bool x, Bool y -> Bool (x = y)
   | NE, Bool x, Bool y -> Bool (x <> y)
   | _ -> fail "incompatble types"
@@ -48,6 +54,7 @@ let rec eval env ast =
   match ast with
   | FloatLiteral f -> Float f
   | BoolLiteral b -> Bool b
+  | StringLiteral s -> String s
   | ID id -> (
       match lookup env id with
       | None -> fail "%s is undefined" id

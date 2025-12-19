@@ -26,7 +26,8 @@ module CmdlinerExpr = struct
   let of_string s =
     match Expr.Eval.string env s with
     | Expr.Eval.Float x -> Ok x
-    | Expr.Eval.Bool _ -> error "%s is a boolean expression" s
+    | Expr.Eval.Bool b -> error "%s is a boolean expression: %b" s b
+    | Expr.Eval.String str -> error "%s is a string expression: %s" s str
     | exception Expr.Eval.Failure msg -> error "%s" msg
     | exception e -> error "%s" (Printexc.to_string e)
 

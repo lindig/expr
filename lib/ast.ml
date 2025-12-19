@@ -9,6 +9,7 @@
 type expr =
   | FloatLiteral of float
   | BoolLiteral of bool
+  | StringLiteral of string
   | ID of string
   | Plus of expr * expr
   | Minus of expr * expr

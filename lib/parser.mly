@@ -3,6 +3,7 @@
 %token <float> FLOAT_LITERAL
 %token <bool> BOOL_LITERAL
 %token <string> ID
+%token <string> STRING
 %token LPAREN RPAREN
 %token LBRACK RBRACK
 %token KOMMA
@@ -30,6 +31,7 @@ expression: expr { $1 }
 expr:
   | FLOAT_LITERAL         { FloatLiteral $1 }
   | BOOL_LITERAL          { BoolLiteral $1 }
+  | STRING                { StringLiteral $1 }
   | ID                    { ID $1 }
   | expr PLUS expr        { Plus ($1, $3) }
   | expr MINUS expr       { Minus ($1, $3) }
