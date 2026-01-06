@@ -10,7 +10,7 @@ type rel = EQ | NE | LT | GT | LE | GE
 let fail fmt = Printf.ksprintf (fun msg -> raise (Failure msg)) fmt
 let lookup env key = Hashtbl.find_opt env key
 
-type env = (string, float) Hashtbl.t
+type env = (string, value) Hashtbl.t
 
 let empty () = Hashtbl.create 5
 let add env key value = Hashtbl.add env key value
@@ -56,9 +56,7 @@ let rec eval env ast =
   | BoolLiteral b -> Bool b
   | StringLiteral s -> String s
   | ID id -> (
-      match lookup env id with
-      | None -> fail "%s is undefined" id
-      | Some v -> Float v)
+      match lookup env id with None -> fail "%s is undefined" id | Some v -> v)
   | Plus (e1, e2) -> float_eval ( +. ) (eval env e1) (eval env e2)
   | Minus (e1, e2) -> float_eval ( -. ) (eval env e1) (eval env e2)
   | Times (e1, e2) -> float_eval ( *. ) (eval env e1) (eval env e2)

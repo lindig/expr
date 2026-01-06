@@ -21,7 +21,10 @@ let help =
    accept them as arguments. *)
 module CmdlinerExpr = struct
   let error fmt = Printf.ksprintf (fun msg -> Error (`Msg msg)) fmt
-  let env = Expr.Eval.env [ ("pi", Float.pi); ("e", Float.exp 1.0) ]
+  let float x = Expr.Eval.Float x
+
+  let env =
+    Expr.Eval.env [ ("pi", float Float.pi); ("e", float (Float.exp 1.0)) ]
 
   let of_string s =
     match Expr.Eval.string env s with
