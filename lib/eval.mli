@@ -8,9 +8,9 @@ type value = Bool of bool | Float of float | String of string
 type env
 
 val empty : unit -> env
-val add : env -> string -> float -> unit
-val add' : env -> string list -> float -> unit
-val env : (string * float) list -> env
+val add : env -> string -> value -> unit
+val add' : env -> string list -> value -> unit
+val env : (string * value) list -> env
 val compile : string -> expression
 val string : env -> string -> value
 val expr : env -> expression -> value

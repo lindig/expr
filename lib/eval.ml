@@ -8,9 +8,9 @@ type value = Bool of bool | Float of float | String of string
 type rel = EQ | NE | LT | GT | LE | GE
 
 let fail fmt = Printf.ksprintf (fun msg -> raise (Failure msg)) fmt
-let lookup env key = Hashtbl.find_opt env key |> Option.map (fun v -> Float v)
+let lookup env key = Hashtbl.find_opt env key
 
-type env = (string, float) Hashtbl.t
+type env = (string, value) Hashtbl.t
 
 let empty () = Hashtbl.create 5
 let add env key value = Hashtbl.add env key value
