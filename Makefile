@@ -24,6 +24,7 @@ deps:
 
 clean:
 	$(DUNE) clean
+	rm -f opam
 
 utop:
 	$(DUNE) utop
