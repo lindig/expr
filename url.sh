@@ -1,6 +1,6 @@
 #! /bin/bash
 set -e
-V=${1:-0.6.0}
+V=${1:-0.6.1}
 url="https://github.com/lindig/expr/archive/$V.zip"
 test -f $V.zip || wget "$url"
 cat <<EOF

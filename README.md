@@ -20,20 +20,20 @@ $ make utop
 utop # Expr.Eval.simple "3+4*5 == 23";;
 - : Expr.Eval.value = Expr.Eval.Bool true
 
-utop # let env = Expr.Eval.env ["pi", Float.pi] in
-  Expr.Eval.string env "pi * pi";;
+let env = Expr.(Eval.env ["pi", Float Float.pi]) in
+    Expr.Eval.string env "pi * pi";;
 - : Expr.Eval.value = Expr.Eval.Float 9.86960440108935799
 ```
 
 Features:
-* Floating point and boolean expressions
-* Expressions may contain floating point variables
+* Floating point, boolean, and string expressions
+* Expressions may contain variables
 * Proper precedence and associativity
 
 # CLI
 
 This code is intended as a library but includes a minimal command-line
-binary that accept the string to evaluate as an argument:
+binary that accepts a string to evaluate as an argument:
 
 ```sh
 ./_build/default/bin/main.exe "3.0 * 3.0 * pi"

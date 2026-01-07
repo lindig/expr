@@ -1,5 +1,11 @@
 
+# 0.6.1
 
+* Better documentation of the eval.mli interface.
+
+* Previously only float values could be bound to names in an
+  environemnt. Now a name can bind any of float, boolean, or string
+  values. This is a breaking change.
 
 # 0.6.0
 
