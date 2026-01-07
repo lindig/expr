@@ -39,6 +39,6 @@ changes:
 
 opam: 	all
 	cp expr.opam opam
-	./url.sh 0.6.0 >> opam
+	./url.sh $$(git describe --tags --abbrev=0) >> opam
 
 # vim:ts=8:noet:
