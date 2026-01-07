@@ -37,10 +37,8 @@ format:
 changes:
 	git log "$$(git describe --tags --abbrev=0)..HEAD" --pretty=format:"* %s"
 
-release:
-	dune-release tag
-	dune-release distrib
-	dune-release opam pkg
-	echo 'use "dune-release opam submit" to release on Opam'
+opam: 	all
+	cp expr.opam opam
+	./url.sh 0.6.0 >> opam
 
 # vim:ts=8:noet:
