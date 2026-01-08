@@ -1,5 +1,5 @@
 
-# 0.6.1
+# 0.7.0
 
 * Better documentation of the eval.mli interface.
 
