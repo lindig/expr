@@ -1,6 +1,6 @@
 (executable
  (name main)
- (public_name expr)
+ (public_name oxpr)
  (libraries expr cmdliner))
 
 (rule
