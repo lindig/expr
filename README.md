@@ -29,6 +29,10 @@ Features:
 * Floating point, boolean, and string expressions
 * Expressions may contain variables
 * Proper precedence and associativity
+* Literals like 6:30 are interpreted as a time span (minute:seconds) 
+  and coverted to seconds by the scanner. Hence, this is just a another
+  way to specify a float literal. See [lexer.mll](lib/lexer.mll) for details.
+  
 
 # CLI
 
@@ -83,12 +87,9 @@ or for the development version
 $ opam pin add expr https://github.com/lindig/expr.git
 ```
 
-
 once this package has been merged into the official Opam repository.
 
 # Documentation
-
-To be done; but take a look at:
 
 * eval.mli for the API
 * parser.mly for the grammar
