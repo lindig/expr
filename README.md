@@ -30,6 +30,12 @@ Features:
 * Expressions may contain variables
 * Proper precedence and associativity
 
+# h:m:s Values
+
+The library parses a value `3:45` as 3 minutes, 45 seconds, resulting in a value
+of `225.0` seconds. So it is another way to denote 225. See `lexer.mll` for
+the details of this.
+
 # CLI
 
 This code is intended as a library but includes a minimal command-line
@@ -40,7 +46,9 @@ binary that accepts a string to evaluate as an argument:
 28.274334
 ```
 
-The [Cmdliner] library can be extended to provide expression arguments:
+# Cmdliner
+
+The popular [Cmdliner] library can be extended to provide expression arguments:
 
 ```ocaml
 module C = Cmdliner
@@ -82,9 +90,6 @@ or for the development version
 ```sh
 $ opam pin add expr https://github.com/lindig/expr.git
 ```
-
-
-once this package has been merged into the official Opam repository.
 
 # Documentation
 
