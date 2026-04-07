@@ -5,8 +5,10 @@ exception Failure of string
 (** Any problem is reported: syntax of an expression or unknown bindings *)
 
 type value = Bool of bool | Float of float | String of string
-type expression
-(* See the README and parser.mly for the supported expression syntax *)
+type expression = Ast.expression
+(* See the README and parser.mly for the supported expression syntax.
+   An expression is either constructed directly or using [compile] below.
+*)
 
 type env
 (** An [env] binds a names to [value]s. *)

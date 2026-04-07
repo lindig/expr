@@ -25,6 +25,6 @@ type expr =
   | GreaterEqual of expr * expr
   | NotEqual of expr * expr
   | Inside of expr * expr * expr (* v in [x, y] *)
-  | Outside of expr * expr * expr (* v in [x, y] *)
+  | Outside of expr * expr * expr (* v not in [x, y] *)
 
 type expression = expr
