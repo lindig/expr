@@ -14,7 +14,7 @@ bug-reports: "https://github.com/lindig/expr/issues"
 depends: [
   "dune" {>= "2.7"}
   "ocaml" {>= "4.08.0"}
-  "cmdliner" {>= "1.1.0" & < "2.0.0"}
+  "cmdliner"
   "odoc" {with-doc}
 ]
 build: [

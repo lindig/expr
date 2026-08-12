@@ -21,7 +21,4 @@
  (depends
   (ocaml
    (>= 4.08.0))
-  (cmdliner
-   (and
-    (>= 1.1.0)
-    (< 2.0.0)))))
+  cmdliner))
