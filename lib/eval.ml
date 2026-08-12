@@ -96,7 +96,7 @@ let parse lexbuf =
   try Parser.expression Lexer.token lexbuf with
   | Lexer.Failure msg ->
       let pos = lexbuf.Lexing.lex_curr_p in
-      fail "Lexing Error at line %d, char %d: %s\n" pos.Lexing.pos_lnum
+      fail "Lexing error at line %d, char %d: %s\n" pos.Lexing.pos_lnum
         (pos.Lexing.pos_cnum - pos.Lexing.pos_bol)
         msg
   | _ ->

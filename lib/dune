@@ -1,7 +1,7 @@
 (library
  (name expr)
  (public_name expr)
- (private_modules ast parser lexer)
+ (private_modules parser lexer)
  (libraries))
 
 (ocamllex lexer)
